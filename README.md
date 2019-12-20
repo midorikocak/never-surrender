@@ -4,7 +4,7 @@
 
 [Demo](https://youtu.be/LWZcIPAJ2pM)
 
-Text indentation based on silence between words.
+Text kerning based on silence between words.
 Analyzed using Descript.
 
 Visualized using Processing. 
