@@ -10,12 +10,12 @@ int x, y;
 
 void setup() {
   minim = new Minim(this);
-  song = minim.loadFile("speech.mp3", 1024);
+  song = minim.loadFile("speech.mp3", 1024); //<>//
   song.play();
 
   words = loadStrings("speech.txt");
   table = loadTable("convertcsv.csv", "header");
-  size(640, 640);
+  size(640, 360);
   background(255);
 }
 
@@ -59,7 +59,7 @@ float lyrics(int topShift, float currentTime) {
     kerning = row.getFloat("start")*1000 - previousEnd;
 
     float shift = (kerning / maxKern) * 100;
-    if (indent>550 || shift>0) {
+    if (indent>550 || shift>20) {
       indent = 0;
       offset += 20;
     }
@@ -69,7 +69,7 @@ float lyrics(int topShift, float currentTime) {
     //println(indent);
     textSize(16);
     if (start<currentTime) {
-      if (offset>640) {
+      if (offset>340) {
         offset = 20;
         background(255);
       }
