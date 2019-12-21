@@ -1,4 +1,5 @@
-String words[];
+String words[]; //<>//
+PFont font;
 
 import ddf.minim.*;
 import ddf.minim.analysis.*;
@@ -8,21 +9,28 @@ Minim minim;
 AudioPlayer song;
 int x, y;
 
+PImage img;
+
+
 void setup() {
+img = loadImage("calm.png");
+
+  font = loadFont("CaslonsEgyptian-Regular-32.vlw");
+  textFont(font, 32);
   minim = new Minim(this);
-  song = minim.loadFile("speech.mp3", 1024); //<>//
+  song = minim.loadFile("speech.mp3", 1024);
   song.play();
 
   words = loadStrings("speech.txt");
   table = loadTable("convertcsv.csv", "header");
-  size(640, 360);
-  background(255);
+  size(1280, 720);
+  background(255, 0, 0);
 }
 
 float lyrics(int topShift, float currentTime) {
-  fill(0);
-  float indent = 20;
-  float offset = 20;
+  fill(255);
+  float indent = 160;
+  float offset = 160;
   int i = 0;
   println(table.getRowCount() + " total rows in table");
 
@@ -55,23 +63,23 @@ float lyrics(int topShift, float currentTime) {
 
     start = row.getFloat("start")*1000;
     end = row.getFloat("end")*1000;
-    word = row.getString("word");
+    word = row.getString("word").toUpperCase();
     kerning = row.getFloat("start")*1000 - previousEnd;
 
     float shift = (kerning / maxKern) * 100;
-    if (indent>550 || shift>20) {
-      indent = 0;
-      offset += 20;
-    }
 
-    indent += i == 0 ? 20 : textWidth(previousWord) + shift + 5;
-    indent = indent > 640 ? 0 : indent;
+    if (indent>800 || shift>20) {
+      indent = 160;
+      offset += 40;
+    } 
+    
+    indent += i==0 ? 0 : textWidth(previousWord) + shift + 10;
+
     //println(indent);
-    textSize(16);
     if (start<currentTime) {
-      if (offset>340) {
-        offset = 20;
-        background(255);
+      if (offset>600) {
+        offset = 200;
+        background(255, 0, 0);
       }
       text(word, indent, offset + topShift);
     }
@@ -80,15 +88,18 @@ float lyrics(int topShift, float currentTime) {
     previousStart = start;
     previousEnd = end;
   }
-  return offset;
+  return indent;
 }
 
 void draw() {
 
-  background(255);
+  background(255, 0, 0);
 
-  fill(0);
-  textSize(32);
-  println(lyrics(0, millis()));
+  fill(255);
+
+  println(lyrics(0, millis()-650));
+  float imgWidth = 600/8;
+  float imgHeight = 518/8;
+    image(img, width /2 - (imgWidth/2), 50, imgWidth, imgHeight);
   //text(millis(), width>>1, height>>1);
 }
