@@ -64,19 +64,35 @@ float lyrics(int topShift, float currentTime) {
     start = row.getFloat("start")*1000;
     end = row.getFloat("end")*1000;
     word = row.getString("word").toUpperCase();
-    kerning = row.getFloat("start")*1000 - previousEnd;
-
+    
+    kerning = start - previousEnd;
     float shift = (kerning / maxKern) * 100;
+    
 
-    if (indent>800 || shift>20) {
-      indent = 160;
-      offset += 40;
-    } 
+    
+
+
+
+    
+   if(previousEnd<currentTime && currentTime < start && kerning>0){
+      kerning = currentTime - previousEnd;    
+      shift = (kerning / maxKern) * 100;
+    }
+    else {
+      kerning = start - previousEnd;
+      shift = (kerning / maxKern) * 100;
+    }
+    
+    float distance = ((start - previousEnd) / maxKern)*100;
     
     indent += i==0 ? 0 : textWidth(previousWord) + shift + 10;
-
+    
+    if (indent>800 || distance>25) {
+      indent = 160 + shift + 10;
+      offset += 40;
+    } 
     //println(indent);
-    if (start<currentTime) {
+    if (previousEnd<currentTime) {
       if (offset>600) {
         offset = 200;
         background(255, 0, 0);
